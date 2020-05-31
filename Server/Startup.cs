@@ -70,10 +70,6 @@ namespace SyncfusionHelpDeskClient.Server
             services.AddDbContext<SyncfusionHelpDeskContext>(options =>
             options.UseSqlServer(
                 Configuration.GetConnectionString("DefaultConnection")));
-
-            // Register the controllers as services
-            services.AddScoped<SyncfusionHelpDeskController>();
-            services.AddScoped<EmailController>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

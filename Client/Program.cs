@@ -34,7 +34,7 @@ namespace SyncfusionHelpDeskClient.Client
             builder.Services.AddApiAuthorization();
 
             // Syncfusion support
-            builder.Services.AddSyncfusionBlazor();
+            builder.Services.AddSyncfusionBlazor(true);
 
             await builder.Build().RunAsync();
         }

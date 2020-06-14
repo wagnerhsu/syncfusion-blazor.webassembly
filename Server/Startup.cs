@@ -13,8 +13,6 @@ using Microsoft.Extensions.Hosting;
 using System.Linq;
 using SyncfusionHelpDeskClient.Server.Data;
 using SyncfusionHelpDeskClient.Server.Models;
-
-// Additional Usings
 using SyncfusionHelpDesk.Data;
 
 namespace SyncfusionHelpDeskClient.Server
@@ -37,7 +35,7 @@ namespace SyncfusionHelpDeskClient.Server
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<ApplicationUser>()
-                .AddRoles<IdentityRole>()
+                .AddRoles<IdentityRole>() // Add Roles
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             // From: https://github.com/dotnet/AspNetCore.Docs/issues/17649
@@ -52,7 +50,8 @@ namespace SyncfusionHelpDeskClient.Server
                 });
 
             // Need to do this as it maps "role" to ClaimTypes.Role and causes issues
-            System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("role");
+            System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler
+                .DefaultInboundClaimTypeMap.Remove("role");
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();

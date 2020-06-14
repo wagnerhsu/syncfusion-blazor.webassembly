@@ -3,11 +3,9 @@
 @using SyncfusionHelpDeskClient.Shared
 @inject HttpClient Http
 @inject IHttpClientFactory ClientFactory
-
 <AuthorizeView Roles="@ADMINISTRATION_ROLE">
     <p>You are an Administrator</p>
 </AuthorizeView>
-
 <SfToast ID="toast_default" Height="50"
          @ref="ToastObj"
          Title="Help Desk Ticket"
@@ -27,7 +25,8 @@
                         FloatLabelType="@FloatLabelType.Always"
                         @bind-Value="@objHelpDeskTicket.TicketStatus">
             <DropDownListFieldSettings Text="Text"
-                                       Value="ID"></DropDownListFieldSettings>
+                                       Value="ID">
+            </DropDownListFieldSettings>
         </SfDropDownList>
     </div>
     <div>
@@ -41,13 +40,17 @@
     <div>
         <SfTextBox Placeholder="Ticket Description"
                    FloatLabelType="@FloatLabelType.Always"
-                   @bind-Value="@objHelpDeskTicket.TicketDescription"></SfTextBox>
+                   @bind-Value="@objHelpDeskTicket.TicketDescription">
+
+        </SfTextBox>
         <ValidationMessage For="@(() => objHelpDeskTicket.TicketDescription)" />
     </div>
     <div>
         <SfTextBox Placeholder="Requester Email"
                    FloatLabelType="@FloatLabelType.Always"
-                   @bind-Value="@objHelpDeskTicket.TicketRequesterEmail"></SfTextBox>
+                   @bind-Value="@objHelpDeskTicket.TicketRequesterEmail">
+
+        </SfTextBox>
         <ValidationMessage For="@(() => objHelpDeskTicket.TicketRequesterEmail)" />
     </div>
     <br /><br />
@@ -59,20 +62,22 @@
 </EditForm>
 
 @code {
-    [CascadingParameter]
-    private Task<AuthenticationState> authenticationStateTask { get; set; }
-
-    HttpClient NoAuthenticationClient;
     string ADMINISTRATION_ROLE = "Administrators";
-    HelpDeskTicket objHelpDeskTicket = new HelpDeskTicket();
+
     SfToast ToastObj;
     private string ToastContent { get; set; } = "";
+
+    // HttpClient to allow anonymous http calls
+    HttpClient NoAuthenticationClient;
+    // Global property for the Help Desk Ticket
+    HelpDeskTicket objHelpDeskTicket = new HelpDeskTicket();
 
     protected override void OnInitialized()
     {
         // Create a httpClient to use for non-authenticated calls
         NoAuthenticationClient =
-             ClientFactory.CreateClient("ServerAPI.NoAuthenticationClient");
+             ClientFactory.CreateClient(
+                 "ServerAPI.NoAuthenticationClient");
     }
 
     public async Task HandleValidSubmit(EditContext context)

@@ -40,7 +40,8 @@ namespace SyncfusionHelpDesk.Data
             int top = (Request.Query.TryGetValue("$top", out Take))
                 ? Convert.ToInt32(Take[0]) : TotalRecordCount;
 
-            string orderby = (Request.Query.TryGetValue("$orderby", out OrderBy))
+            string orderby =
+                (Request.Query.TryGetValue("$orderby", out OrderBy))
                 ? OrderBy.ToString() : "TicketDate";
 
             // Handle OrderBy direction
@@ -59,7 +60,8 @@ namespace SyncfusionHelpDesk.Data
             }
             else
             {
-                System.Reflection.PropertyInfo prop = typeof(HelpDeskTickets).GetProperty(orderby);
+                System.Reflection.PropertyInfo prop =
+                    typeof(HelpDeskTickets).GetProperty(orderby);
 
                 return new
                 {
@@ -93,7 +95,8 @@ namespace SyncfusionHelpDesk.Data
             // Note: Caller must have the TicketGuid
             var ExistingTicket =
                 _context.HelpDeskTickets
-                .Where(x => x.TicketGuid == UpdatedHelpDeskTickets.TicketGuid)
+                .Where(x => x.TicketGuid ==
+                UpdatedHelpDeskTickets.TicketGuid)
                 .FirstOrDefault();
 
             if (ExistingTicket != null)
@@ -176,21 +179,23 @@ namespace SyncfusionHelpDesk.Data
         }
     }
 
-
-    // From: https://stackoverflow.com/questions/1689199/c-sharp-code-to-order-by-a-property-using-the-property-name-as-a-string
+    // From: https://bit.ly/30ypMCp
     public static class IQueryableExtensions
     {
-        public static IOrderedQueryable<T> OrderBy<T>(this IQueryable<T> source, string propertyName)
+        public static IOrderedQueryable<T> OrderBy<T>(
+            this IQueryable<T> source, string propertyName)
         {
             return source.OrderBy(ToLambda<T>(propertyName));
         }
 
-        public static IOrderedQueryable<T> OrderByDescending<T>(this IQueryable<T> source, string propertyName)
+        public static IOrderedQueryable<T> OrderByDescending<T>(
+            this IQueryable<T> source, string propertyName)
         {
             return source.OrderByDescending(ToLambda<T>(propertyName));
         }
 
-        private static Expression<Func<T, object>> ToLambda<T>(string propertyName)
+        private static Expression<Func<T, object>> ToLambda<T>(
+            string propertyName)
         {
             var parameter = Expression.Parameter(typeof(T));
             var property = Expression.Property(parameter, propertyName);

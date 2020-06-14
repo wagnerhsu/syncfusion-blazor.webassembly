@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace SyncfusionHelpDeskClient.Server.Controllers
 {
+    [AllowAnonymous] // Allow Everyone
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
@@ -26,7 +27,6 @@ namespace SyncfusionHelpDeskClient.Server.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IEnumerable<WeatherForecast> Get()
         {
             var rng = new Random();

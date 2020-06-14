@@ -2,7 +2,8 @@
 @using SyncfusionHelpDeskClient.Shared
 @inject HttpClient Http
 @inject IHttpClientFactory ClientFactory
-
+@*AuthorizeView control ensures that *@
+@*Only users in the Administrators role can view this content*@
 <AuthorizeView Roles="Administrators">
     <div>
         <div id="target" style="height: 500px;">
@@ -13,7 +14,8 @@
                     AllowSorting="true"
                     AllowResizing="true"
                     AllowReordering="true">
-                <SfDataManager Url="SyncfusionHelpDesk" Adaptor="Adaptors.WebApiAdaptor"></SfDataManager>
+                <SfDataManager Url="SyncfusionHelpDesk" Adaptor="Adaptors.WebApiAdaptor">
+                </SfDataManager>
                 <GridPageSettings PageSize="5"></GridPageSettings>
                 <GridEvents CommandClicked="OnCommandClicked"
                             TValue="HelpDeskTicket">
@@ -23,28 +25,33 @@
                         <GridCommandColumns>
                             <GridCommandColumn Type=CommandButtonType.Edit
                                                ButtonOption="@(new CommandButtonOptions()
-                                                               { Content = "Edit" })">
+                                                { Content = "Edit" })">
                             </GridCommandColumn>
                             <GridCommandColumn Type=CommandButtonType.Delete
                                                ButtonOption="@(new CommandButtonOptions()
-                                                               { Content = "Delete" })">
+                                                { Content = "Delete" })">
                             </GridCommandColumn>
                         </GridCommandColumns>
                     </GridColumn>
                     <GridColumn IsPrimaryKey="true" Field=@nameof(HelpDeskTicket.Id)
-                                HeaderText="ID #" TextAlign="@TextAlign.Left" Width="70">
+                                HeaderText="ID #" TextAlign="@TextAlign.Left"
+                                Width="70">
                     </GridColumn>
                     <GridColumn Field=@nameof(HelpDeskTicket.TicketStatus)
-                                HeaderText="Status" TextAlign="@TextAlign.Left" Width="80">
+                                HeaderText="Status" TextAlign="@TextAlign.Left"
+                                Width="80">
                     </GridColumn>
                     <GridColumn Field=@nameof(HelpDeskTicket.TicketDate)
-                                HeaderText="Date" TextAlign="@TextAlign.Left" Width="80">
+                                HeaderText="Date" TextAlign="@TextAlign.Left"
+                                Width="80">
                     </GridColumn>
                     <GridColumn Field=@nameof(HelpDeskTicket.TicketDescription)
-                                HeaderText="Description" TextAlign="@TextAlign.Left" Width="150">
+                                HeaderText="Description" TextAlign="@TextAlign.Left"
+                                Width="150">
                     </GridColumn>
                     <GridColumn Field=@nameof(HelpDeskTicket.TicketRequesterEmail)
-                                HeaderText="Requester" TextAlign="@TextAlign.Left" Width="150">
+                                HeaderText="Requester" TextAlign="@TextAlign.Left"
+                                Width="150">
                     </GridColumn>
                 </GridColumns>
             </SfGrid>
@@ -102,13 +109,21 @@
     private Task<AuthenticationState> authenticationStateTask { get; set; }
 
     SfGrid<HelpDeskTicket> gridObj;
+
+    // SfDataManager calls the Get method in the SyncfusionHelpDesk
+    // controller in the server project and returns IQueryable that the
+    // SfGrid will use to only pull records for the
+    // page that is currently selected
     public IQueryable<HelpDeskTicket> colHelpDeskTickets { get; set; }
+
+    // Global property for the Help Desk Ticket
     private HelpDeskTicket SelectedTicket = new HelpDeskTicket();
-    public bool EditDialogVisibility { get; set; } = false;
+
+    // Property to control the delete dialog
     public bool DeleteRecordConfirmVisibility { get; set; } = false;
 
     public async void OnCommandClicked(
-        CommandClickEventArgs<HelpDeskTicket> args)
+           CommandClickEventArgs<HelpDeskTicket> args)
     {
         if (args.CommandColumn.ButtonOption.Content == "Edit")
         {
@@ -135,6 +150,8 @@
             StateHasChanged();
         }
     }
+
+    public bool EditDialogVisibility { get; set; } = false;
 
     public async Task SaveTicket()
     {
@@ -189,7 +206,7 @@
     {
         // Open the dialog
         // to give the user a chance
-        // to confim they want to delete the record
+        // to confirm they want to delete the record
         this.DeleteRecordConfirmVisibility = false;
     }
 }

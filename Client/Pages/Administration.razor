@@ -110,21 +110,26 @@
     public async void OnCommandClicked(
         CommandClickEventArgs<HelpDeskTicket> args)
     {
-        // Get the selected Help Desk Ticket
-        SelectedTicket =
-            await Http.GetFromJsonAsync<HelpDeskTicket>(
-                "Email?HelpDeskTicketGuid=" + 
-                args.RowData.TicketGuid);
-
         if (args.CommandColumn.ButtonOption.Content == "Edit")
         {
-            // Open teh Edit dialog
+            // Get the selected Help Desk Ticket
+            SelectedTicket =
+                await Http.GetFromJsonAsync<HelpDeskTicket>(
+                    "Email?HelpDeskTicketGuid=" +
+                    args.RowData.TicketGuid);
+
+            // Open the Edit dialog
             this.EditDialogVisibility = true;
             StateHasChanged();
         }
 
         if (args.CommandColumn.ButtonOption.Content == "Delete")
         {
+            // We only need the TicketGuid
+            // of the selected Help Desk Ticket
+            SelectedTicket = new HelpDeskTicket();
+            SelectedTicket.TicketGuid = args.RowData.TicketGuid;
+
             // Open Delete confirmation dialog
             this.DeleteRecordConfirmVisibility = true;
             StateHasChanged();
@@ -146,16 +151,16 @@
         gridObj.Refresh();
 
         // Send Email
-        HelpDeskEmail objHelpDeskEmail = 
+        HelpDeskEmail objHelpDeskEmail =
             new HelpDeskEmail();
 
-        objHelpDeskEmail.EmailType = 
+        objHelpDeskEmail.EmailType =
             "Help Desk Ticket Updated";
 
-        objHelpDeskEmail.EmailAddress = 
+        objHelpDeskEmail.EmailAddress =
             SelectedTicket.TicketRequesterEmail;
 
-        objHelpDeskEmail.TicketGuid = 
+        objHelpDeskEmail.TicketGuid =
             SelectedTicket.TicketGuid;
 
         await Http.PostAsJsonAsync(
@@ -168,7 +173,7 @@
         // seleted Help Desk Ticket
         // Delete the record
         await Http.DeleteAsync(
-            "SyncfusionHelpDesk?HelpDeskTicketGuid=" + 
+            "SyncfusionHelpDesk?HelpDeskTicketGuid=" +
             SelectedTicket.TicketGuid);
 
         // Close the dialog

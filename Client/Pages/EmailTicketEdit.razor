@@ -11,11 +11,11 @@
     }
 </div>
 <SfDialog Target="#target"
-              Width="500px"
-              Height="500px"
-              IsModal="true"
-              ShowCloseIcon="false"
-              @bind-Visible="EditDialogVisibility">
+          Width="500px"
+          Height="500px"
+          IsModal="true"
+          ShowCloseIcon="false"
+          @bind-Visible="EditDialogVisibility">
     <DialogTemplates>
         <Header> EDIT TICKET # @SelectedTicket.Id</Header>
         <Content>
@@ -62,7 +62,8 @@
     public async Task SaveTicket()
     {
         // Save the Help Desk Ticket
-        await NoAuthenticationClient.PutAsJsonAsync("SyncfusionHelpDesk", SelectedTicket);
+        await NoAuthenticationClient.PutAsJsonAsync(
+            "SyncfusionHelpDesk", SelectedTicket);
 
         // Close the Dialog
         EditDialogVisibility = false;
